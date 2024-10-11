@@ -75,30 +75,6 @@ const Registers = () =>{
       } catch (error) {
         console.log("An error occurred:", error);
       }
-  
-      // try{
-      //   const response = await fetch("http://localhost:8080/Register/add",{
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(UserRegisInfo),
-      //     });
-
-      //     if(response.ok){
-      //       const data = await response.json();
-      //       console.log('User has Resgistered', data);
-      //       setRegisterData(data);
-      //       setFirstName('');
-      //       setLastName('');
-      //       setEmail('');
-      //       setPassword('');
-      //   } else{
-      //     console.log("Failed to add your registration");
-      //   } 
-      // } catch (error){
-      //   console.log("Failed to add your registration");
-      // }
       alert("Registration Successful");
       window.location.href = "/Login";
    }

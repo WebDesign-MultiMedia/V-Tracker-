@@ -25,18 +25,7 @@ const Homes = () =>{
         <RecordLog/>
                 <Monitor/>
       <AutoParts/>
-
-
-      {/* <Footer/> */}
       </div>
- 
-      {/* <CustomerSupport/> */}
-      {/* <Calendar/> */}
-
-      
-        
-      
-
 </>
     )
 

@@ -43,42 +43,6 @@ function AutoParts() {
             </dl>
           </div>
         </div>
-
-        {/* <h1 className="text-center text-3xl sm:text-4xl lg:text-4xl font-thin ">Auto Parts Shopping</h1>
-        <div className="py-12 sm:py-20 lg:py-24  ">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
-              {stats.map((stat) => (
-                <a href={stat.link} key={stat.name} className="block group no-underline">
-                  <img
-                    src={stat.imageSrc}
-                    alt={stat.name}
-                    className="w-40 sm:w-48 lg:w-60 mx-auto transition-transform duration-200 group-hover:scale-105"
-                  />
-                  <h3 className="text-green-400 mt-4 text-base sm:text-lg lg:text-xl">{stat.name}</h3>
-                </a>
-              ))}
-            </dl>
-          </div>
-        </div>
-
-        <h1 className="text-center text-3xl sm:text-4xl lg:text-4xl font-thin ">Performance Auto Parts</h1>
-        <div className="py-12 sm:py-20 lg:py-24  h-96  ">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
-              {performanceAutoParts.map((performance) => (
-                <a href={performance.link} key={performance.name} className="block group no-underline">
-                  <img
-                    src={performance.imageSrc}
-                    alt={performance.name}
-                    className="w-40 sm:w-48 lg:w-60 mx-auto transition-transform duration-200 group-hover:scale-105"
-                  />
-                  <h3 className="text-yellow-400 mt-4 text-base sm:text-lg lg:text-xl">{performance.name}</h3>
-                </a>
-              ))}
-            </dl>
-          </div>
-        </div> */}
       </div>
 
       <Footer />
