@@ -1,182 +1,151 @@
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-import React, { useState } from 'react';
-import '/src/index.css';
-import { Link } from "react-router-dom";
-import Login from "./Login";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCarOn, faChartPie, faFileInvoice, faGaugeMed, faGaugeSimpleHigh } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import validation from "./RegisterVal"
-import Font from 'react-font';
+const Registers = () => {
+  const navigate = useNavigate()
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-const Registers = () =>{
- 
-    const [values, setValues] = useState({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      role: ''
-   })
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
 
-   const [errors, setErrors] = useState({})
+    const userInfo = { firstName, lastName, email, password }
 
-   const handleInput = (e) =>{
-      setValues(prev => ({...prev, [e.target.name]: [e.target.value]}))
-   }
+    try {
+      const [registerRes, loginRes] = await Promise.all([
+        fetch('http://localhost:8080/Register/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userInfo),
+        }),
+        fetch('http://localhost:8080/Logins/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userInfo),
+        }),
+      ])
 
-   const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [RegisterData, setRegisterData] = useState('');
-
-   const handleSubmit = async (e) =>{
-      e.preventDefault();
-
-      const UserRegisInfo = {firstName, lastName, email, password }
-
-      try {
-        // Send both POST requests at the same time
-        const [registerResponse, loginResponse] = await Promise.all([
-          fetch("http://localhost:8080/Register/add", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(UserRegisInfo),
-          }),
-          fetch("http://localhost:8080/Logins/add", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(UserRegisInfo), // You can modify this if login data is different
-          })
-        ]);
-    
-        if (registerResponse.ok && loginResponse.ok) {
-          const registerData = await registerResponse.json();
-          const loginData = await loginResponse.json();
-          console.log('User registered:', registerData);
-          console.log('User logged in:', loginData);
-          
-          setRegisterData(registerData);
-          setFirstName('');
-          setLastName('');
-          setEmail('');
-          setPassword('');
-          
-          alert("Registration and Login Successful");
-          window.location.href = "/Login";
-        } else {
-          console.log("Failed to register or log in the user.");
-        }
-      } catch (error) {
-        console.log("An error occurred:", error);
+      if (registerRes.ok && loginRes.ok) {
+        navigate('/Login')
+      } else {
+        setError('Registration failed. Please try again.')
       }
-      alert("Registration Successful");
-      window.location.href = "/Login";
-   }
+    } catch {
+      navigate('/Login')
+    } finally {
+      setLoading(false)
+    }
+  }
 
-    return(
-        <>
-
-<div className="flex justify-center space-x-4 flex-wrap h-14 bg-black ">
-    <FontAwesomeIcon icon={faFileInvoice} className="text-3xl text-white  pr-4 relative top-5" />
-    <FontAwesomeIcon icon={faChartPie} className="text-3xl text-white pr-10 relative top-5" />
-    <FontAwesomeIcon icon={faGaugeMed} className="text-3xl text-white relative top-5"/>
-    <FontAwesomeIcon icon={faCarOn} className="text-3xl text-white pl-5 relative top-5"/>
-  </div>
-
-<Font family='Graduate'>
-    <div className="App flex items-center justify-center min-h-screen bg-black">
-  <form 
-    onSubmit={handleSubmit} htmlFor="Reg"
-    className="relative bottom-64 -mb-px h-px w-80 bg-gradient-to-r from-transparent via-sky-300 to-transparent"
-  >
-    <fieldset className="space-y-4">
-      <h2 className="text-2xl font-semibold text-center text-white ">Sign Up</h2>
-
-      <div className="Field">
-        <label className="block text-sm font-medium text-white" htmlFor="firstName">
-          First name <sup>*</sup>
-        </label>
-        <input  
-        id='firstName'
-
-          className="mt-1 block w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          name='firstName'
-          onChange={(e) => setFirstName(e.target.value)}
-          value={firstName}
-          placeholder="First name"
-        />
-  {errors.firstName && <span className="text-red-600 absolute left-20 ">{errors.firstName}</span>}
-
+  return (
+    <div className="min-h-screen bg-gray-950 flex flex-col">
+      <div className="flex items-center justify-between px-6 py-4">
+        <Link to="/" className="no-underline flex items-center gap-2">
+          <div className="w-7 h-7 bg-red-600 rounded-md flex items-center justify-center">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l1 1h1m8-1V6l2 1 3 9M7 16h10" />
+            </svg>
+          </div>
+          <span className="text-white font-bold text-lg">V Tracker</span>
+        </Link>
+        <Link to="/Login" className="no-underline text-sm text-gray-400 hover:text-white transition-colors">
+          Already have an account? <span className="text-red-400 font-medium">Sign in</span>
+        </Link>
       </div>
 
-      <div className="Field">
-        <label className="block text-sm font-medium text-white" htmlFor="lastName">Last name</label>
-        <input 
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-white mb-2">Create your account</h1>
+            <p className="text-gray-400">Start tracking your vehicle today</p>
+          </div>
 
-          className="mt-1 block w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={lastName}
-          id='lastName'
-          name='lastName'
-          onChange={(e) => setLastName(e.target.value)}
-        />
-          {errors.lastName && <span className="text-red-600 absolute left-20">{errors.lastName}</span>}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-xl">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">First name</label>
+                  <input
+                    type="text"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="John"
+                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors placeholder-gray-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Last name</label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Doe"
+                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors placeholder-gray-500"
+                  />
+                </div>
+              </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Email address</label>
+                <input
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors placeholder-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Min. 8 characters"
+                  className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors placeholder-gray-500"
+                />
+              </div>
+
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-red-600/20 mt-2"
+              >
+                {loading ? 'Creating account...' : 'Create account'}
+              </button>
+            </form>
+
+            <div className="mt-6 pt-6 border-t border-gray-800 text-center">
+              <span className="text-gray-400 text-sm">
+                Already have an account?{' '}
+                <Link to="/Login" className="no-underline text-red-400 font-medium hover:text-red-300 transition-colors">
+                  Sign in
+                </Link>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  )
+}
 
-      <div className="Field">
-        <label className="block text-sm font-medium text-white" htmlFor="email">
-          Email address <sup>*</sup>
-        </label>
-        <input 
-        id='email'
-        autoComplete='email'
-          className="mt-1 block w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-          placeholder="Email address"
-          name="email"
-        />
-          {errors.email && <span className="text-red-600 absolute left-28">{errors.email}</span>}
-
-      </div>
-
-      <div className="Field">
-        <label className="block text-sm font-medium text-white" htmlFor="password">
-          Password <sup>*</sup>
-        </label>
-        <input 
-        id='password'
-          className="text-red-400 mt-1 block w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          placeholder="Password"
-          name="password"
-        />
-          {errors.password && <span className="text-red-600 absolute left-24">{errors.password}</span>}
-      </div>
-  
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded-md font-semibold hover:bg-blue-600 transition duration-300 disabled:bg-gray-300"> 
-        Create account
-      </button>
-    {/* {success && <p className="text-green-500 mt-4">Registration successful!</p>} */}
-
-      <Link to="/Login"  className=" no-underline text-blue-700 bg-white inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:ring hover:ring-white h-10 px-4 py-2 duration-200"> Login </Link>
-    </fieldset>
-  </form>
-</div>
-</Font>
-
-        </>
-    );
-};
-
-export default Registers;
+export default Registers

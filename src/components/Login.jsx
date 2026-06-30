@@ -1,135 +1,140 @@
-import React, { useEffect, useState } from "react";
-import Register from "./Register";
-import { Route, Routes, useNavigate, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCarOn, faChartPie, faFileInvoice, faGaugeMed } from '@fortawesome/free-solid-svg-icons';
-import validation from "./LoginVal";
-import Home from "./Home";
-import Bg from "./video"
-import Font from 'react-font';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+
+const DEMO = { email: 'demo@vtracker.com', password: 'demo123' }
 
 const Login = () => {
-  const [values, setValues] = useState({
-    email: '',
-    password: ''
-  });
-
-  const [errors, setErrors] = useState({});
-  const [userData, setUserData] = useState([]);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleInput = (e) => {
-    setValues(prev => ({ ...prev, [e.target.name]: e.target.value })); // Update to set value correctly
-  };
+  const [values, setValues] = useState({ email: '', password: '' })
+  const [userData, setUserData] = useState([DEMO])
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    // Fetch user data from API
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/Logins');
-        const data = await response.json();
-        setUserData(Array.isArray(data) ? data : []); // Ensure it's an array
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setUserData([]);
+        const res = await fetch('http://localhost:8080/Logins')
+        const data = await res.json()
+        setUserData(Array.isArray(data) ? [...data, DEMO] : [DEMO])
+      } catch {
+        setUserData([DEMO])
       }
-    };
-
-    fetchUserData();
-  }, []);
-
-  const handleRedirect = (e) => {
-    e.preventDefault();
-
-    const user = userData.find(user => user.email === values.email && user.password === values.password);
-
-    if (user) {
-      navigate('/Home');
-      alert("Login successful");
-    } else {
-      setError('Invalid username or password');
     }
-  };
+    fetchUserData()
+  }, [])
+
+  const handleInput = (e) => setValues(prev => ({ ...prev, [e.target.name]: e.target.value }))
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+    const user = userData.find(u => u.email === values.email && u.password === values.password)
+    setTimeout(() => {
+      setLoading(false)
+      if (user) {
+        navigate('/Home')
+      } else {
+        setError('Invalid email or password')
+      }
+    }, 400)
+  }
 
   return (
-    <>
-  
-      <div className="flex justify-center space-x-4 flex-wrap h-14 bg-black">
-        <FontAwesomeIcon icon={faFileInvoice} className="text-3xl text-white pr-4 relative top-5" />
-        <FontAwesomeIcon icon={faChartPie} className="text-3xl text-white pr-10 relative top-5" />
-        <FontAwesomeIcon icon={faGaugeMed} className="text-3xl text-white relative top-5" />
-        <FontAwesomeIcon icon={faCarOn} className="text-3xl text-white pl-5 relative top-5" />
+    <div className="min-h-screen bg-gray-950 flex flex-col">
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-6 py-4">
+        <Link to="/" className="no-underline flex items-center gap-2">
+          <div className="w-7 h-7 bg-red-600 rounded-md flex items-center justify-center">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l1 1h1m8-1V6l2 1 3 9M7 16h10" />
+            </svg>
+          </div>
+          <span className="text-white font-bold text-lg">V Tracker</span>
+        </Link>
+        <Link to="/Register" className="no-underline text-sm text-gray-400 hover:text-white transition-colors">
+          Don't have an account? <span className="text-red-400 font-medium">Sign up</span>
+        </Link>
       </div>
 
-      <div className="bg-black text-white flex min-h-screen flex-col items-center pb-24 sm:justify-center sm:pt-0">
-        <a href="#" className="no-underline text-white">
-          <div className="text-foreground font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2 relative top-10 ">
-            <Link to='/'>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672Zm-7.518-.267A8.25 8.25 0 1 1 20.25 10.5M8.288 14.212A5.25 5.25 0 1 1 17.25 10.5" />
-              </svg>
-            </Link>
-            V Tracker
+      {/* Main content */}
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
+            <p className="text-gray-400">Sign in to your V Tracker account</p>
           </div>
-        </a>
-<Font family="Graduate">
-        <div className="mt-12 w-full max-w-lg sm:mt-10 relative top-10">
-          <div className="relative -mb-px h-px w-full bg-gradient-to-r from-transparent via-sky-300 to-transparent"></div>
-          <div className="mx-5 border border-white/20 shadow-sm lg:rounded-xl lg:shadow-none">
-            <div className="flex flex-col p-6">
-              <h3 className="text-xl font-semibold leading-6 tracking-tighter">Login</h3>
-              <p className="mt-1.5 text-sm font-medium text-white/50">Welcome back, enter your credentials to continue.</p>
-            </div>
-            <div className="p-6 pt-0">
-              <form onSubmit={handleRedirect}>
-                <div className="group relative rounded-lg border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5">
-                  <label htmlFor="email" className="text-xs font-medium text-muted-foreground text-gray-400">
-                    Email
-                  </label>
-                  <input onChange={handleInput} type="email" name="email" value={values.email} autoComplete="off" className="block w-full bg-transparent text-sm" />
-                  {errors.email && <span className="text-red-600">{errors.email}</span>}
-                </div>
-                <div className="mt-4 group relative rounded-lg border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5">
-                  <label htmlFor="password" className="text-xs font-medium text-muted-foreground text-gray-400">
-                    Password
-                  </label>
-                  <input onChange={handleInput} type="password" name="password" value={values.password} className="block w-full bg-transparent text-sm" />
-                  {errors.password && <span className="text-red-600">{errors.password}</span>}
-                </div>
 
-                <div className="mt-4 flex items-center justify-between">
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" required name="remember" className="outline-none focus:outline-sky-300" />
-                    <span className="text-xs">Remember me</span>
-                  </label>
-                  <a className="text-sm font-medium underline" href="/forgot-password">
-                    Forgot password?
-                  </a>
-                </div>
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-xl">
+            {/* Demo shortcut */}
+            <button
+              type="button"
+              onClick={() => setValues({ email: DEMO.email, password: DEMO.password })}
+              className="w-full mb-5 border border-dashed border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 text-sm py-2.5 rounded-xl transition-all"
+            >
+              Use demo account →
+            </button>
 
-                <div className="mt-4 flex items-center justify-end gap-x-2">
-                  <Link to="/Register" className="no-underline hover:bg-black hover:text-white transition bg-white text-black h-10 px-4 py-2 rounded-md">
-                    Register
-                  </Link>
-                  {error && <p style={{ color: 'red' }}>{error}</p>}
-                  <button className="font-semibold hover:bg-black hover:text-white transition bg-white text-black h-10 px-4 py-2 rounded-md" type="submit">
-                    Log in
-                  </button>
-                </div>
-              </form>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Email address</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleInput}
+                  required
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors placeholder-gray-500"
+                />
+              </div>
 
-              <Routes>
-                <Route path="/Register" element={<Register />} />
-                <Route path="/Home" element={<Home />} />
-              </Routes>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-sm font-medium text-gray-300">Password</label>
+                  <a href="#" className="text-xs text-red-400 hover:text-red-300 transition-colors no-underline">Forgot password?</a>
+                </div>
+                <input
+                  type="password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleInput}
+                  required
+                  placeholder="••••••••"
+                  className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors placeholder-gray-500"
+                />
+              </div>
+
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-red-600 hover:bg-red-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-red-600/20 hover:shadow-red-500/30"
+              >
+                {loading ? 'Signing in...' : 'Sign in'}
+              </button>
+            </form>
+
+            <div className="mt-6 pt-6 border-t border-gray-800 text-center">
+              <span className="text-gray-400 text-sm">
+                New to V Tracker?{' '}
+                <Link to="/Register" className="no-underline text-red-400 font-medium hover:text-red-300 transition-colors">
+                  Create an account
+                </Link>
+              </span>
             </div>
           </div>
         </div>
-        </Font>
       </div>
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default Login;
+export default Login

@@ -1,93 +1,49 @@
-import '/src/App.css';
-import { Disclosure } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Login from './Login';
-import Registers from './Register';
-import Home from './Home';
-import { Route, Routes } from 'react-router-dom';
-import Font, { Text } from 'react-font';
-
-const navigation = [
-  { name: 'Login', href: '/Login', current: false }, 
-  { name: 'Register', href: '/Register', current: false },
-
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const HomeNavbar = () => {
+  const [open, setOpen] = useState(false)
+
   return (
-    <>
-  
-  <Disclosure as="nav" className="bg-gray-900 h-20">
-        {({ open }) => (
-          <>
-            <div className="max-w-screen-xl px-4 py-3 mx-auto">
-              <div className="flex items-center justify-between sm:justify-center">
-                {/* Full navigation for medium and large screens */}
-                <div className="hidden sm:flex space-x-6 justify-center">
-                  {navigation.map((item) => (
-                  <Font family='Graduate'>  <Link
-                      key={item.name}
-                      to={item.href}
-                      className={classNames(
-                        item.current
-                          ? 'text-blue-400 dark:text-white sm:text-2xl'
-                          : 'text-blue-400  hover:bg-red-600 hover:text-green-300 sm:hover:text-white sm:text-2xl',
-                        'px-2 w-40 text-center no-underline py-2 rounded-md text-lg font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Link> </Font>
-                  ))}
-                </div>
+    <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+      <div className="max-w-screen-xl mx-auto px-6 py-4 flex items-center justify-between">
+        <Link to="/" className="no-underline flex items-center gap-2">
+          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+            <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l1 1h1m8-1V6l2 1 3 9M7 16h10" />
+            </svg>
+          </div>
+          <span className="text-white font-semibold text-xl tracking-tight">V Tracker</span>
+        </Link>
 
-                {/* Hamburger menu for small screens */}
-                <div className="flex sm:hidden">
-                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </Disclosure.Button>
-                </div>
-              </div>
-            </div>
+        <div className="hidden sm:flex items-center gap-3">
+          <Link to="/Login" className="no-underline text-white/80 hover:text-white font-medium px-4 py-2 rounded-full hover:bg-white/10 transition-all">
+            Login
+          </Link>
+          <Link to="/Register" className="no-underline bg-white text-black font-semibold px-5 py-2 rounded-full hover:bg-gray-100 transition-all">
+            Sign Up
+          </Link>
+        </div>
 
-            {/* Mobile menu dropdown */}
-            <Disclosure.Panel className="sm:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as={Link}
-                    to={item.href}
-                    className={classNames(
-                      item.current
-                        ? 'bg-blue-500 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'block px-3 py-2 rounded-md text-lg font-medium no-underline'
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
+        <button onClick={() => setOpen(!open)} className="sm:hidden text-white p-2">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {open
+              ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            }
+          </svg>
+        </button>
+      </div>
 
-      </>
-  );
-};
+      {open && (
+        <div className="sm:hidden bg-black/90 backdrop-blur-md px-6 py-4 flex flex-col gap-3 border-t border-white/10">
+          <Link to="/Login" onClick={() => setOpen(false)} className="no-underline text-white font-medium py-2">Login</Link>
+          <Link to="/Register" onClick={() => setOpen(false)} className="no-underline text-white font-medium py-2">Sign Up</Link>
+        </div>
+      )}
+    </nav>
+  )
+}
 
-export default HomeNavbar;
+export default HomeNavbar

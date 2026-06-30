@@ -1,114 +1,99 @@
-import '/src/App.css';
-import { Disclosure } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Login from './Login';
-import Registers from './Register';
-import Home from './Home';
-import CustomerSupportForm from './CustomerSupport';
-import { Route, Routes } from 'react-router-dom';
-import Font from 'react-font';
-const navigation = [
-  { name: 'Home', href: '/Home', current: true },
-  { name: 'Expenses', href: '/Expenses', current: false },
-  { name: 'Captures ', href: '/VideoImageLog', current: false },
-  { name: 'Logs', href: '/vehicleTrackerPage', current: false },
-];
+import React, { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+const navigation = [
+  { name: 'Dashboard', href: '/Home' },
+  { name: 'Logs', href: '/vehicleTrackerPage' },
+  { name: 'Expenses', href: '/Expenses' },
+  { name: 'Captures', href: '/VideoImageLog' },
+]
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false)
+  const location = useLocation()
+
   return (
-    <>
-    <Font family='Graduate'>
-      <nav className="border-gray-200 dark:bg-red-900 bg-black">
-        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
-          <Link to='/Home' className="flex items-center space-x-3 no-underline">
-            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-            <span className="self-center font-semibold whitespace-nowrap dark:text-white text-3xl">V Tracker</span>
+    <header className="bg-gray-950 border-b border-gray-800 sticky top-0 z-50">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link to="/Home" className="no-underline flex items-center gap-2.5">
+            <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l1 1h1m8-1V6l2 1 3 9M7 16h10" />
+              </svg>
+            </div>
+            <span className="text-white font-bold text-xl tracking-tight">V Tracker</span>
           </Link>
-          <div className="hidden sm:flex items-center space-x-6">
-            <a href="tel:5541251234" className="text-sm text-gray-100 dark:text-white hover:underline no-underline">(347) 490-5546</a>
-            <Link to="/CustomerSupport" className="text-md text-blue-600 dark:text-blue-500 hover:underline hover:text-white no-underline">Support Form</Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden sm:flex items-center gap-1">
+            {navigation.map((item) => {
+              const active = location.pathname === item.href
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`no-underline px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    active
+                      ? 'bg-red-600 text-white'
+                      : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* Right side */}
+          <div className="hidden sm:flex items-center gap-3">
+            <Link to="/CustomerSupport" className="no-underline text-gray-400 hover:text-white text-sm transition-colors">
+              Support
+            </Link>
+            <Link to="/" className="no-underline bg-gray-800 hover:bg-gray-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-all">
+              Sign Out
+            </Link>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button onClick={() => setOpen(!open)} className="sm:hidden text-gray-400 hover:text-white p-2 rounded-lg hover:bg-gray-800 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {open
+                ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              }
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="sm:hidden bg-gray-950 border-t border-gray-800 px-4 py-3 space-y-1">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              onClick={() => setOpen(false)}
+              className={`no-underline block px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                location.pathname === item.href
+                  ? 'bg-red-600 text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+          <div className="pt-2 border-t border-gray-800 mt-2">
+            <Link to="/CustomerSupport" onClick={() => setOpen(false)} className="no-underline block px-4 py-2.5 text-sm text-gray-400 hover:text-white">Support</Link>
+            <Link to="/" onClick={() => setOpen(false)} className="no-underline block px-4 py-2.5 text-sm text-gray-400 hover:text-white">Sign Out</Link>
           </div>
         </div>
-      </nav>
+      )}
+    </header>
+  )
+}
 
-      <Disclosure as="nav" className="bg-gray-900">
-        {({ open }) => (
-          <>
-            <div className="max-w-screen-xl px-4 py-3 mx-auto">
-              <div className="flex items-center justify-between sm:justify-center">
-                {/* Full navigation for medium and large screens */}
-                <div className="hidden sm:flex space-x-6 justify-center">
-                  {navigation.map((item) => (
-                    <Link 
-                      key={item.name}
-                      to={item.href}
-                      className={classNames(
-                        item.current
-                          ? 'text-blue-400 dark:text-white sm:text-2xl font-thin hover:bg-blue-400 hover:text-white hover:font-bold'
-                          : 'text-blue-400 font-bold hover:bg-red-400 hover:text-white  sm:hover:text-white sm:text-2xl hover:font-thin',
-                        'px-2 w-40 text-center no-underline py-2 rounded-md text-lg font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Hamburger menu for small screens */}
-                <div className="flex sm:hidden">
-                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </Disclosure.Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile menu dropdown */}
-            <Disclosure.Panel className="sm:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as={Link}
-                    to={item.href}
-                    className={classNames(
-                      item.current
-                        ? 'bg-blue-500 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'block px-3 py-2 rounded-md text-lg font-medium no-underline'
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-      <Routes>
-               <Route path='/Register' element={<Registers/>} />
-               <Route path="/Login" element={<Login/>} />
-               <Route path="/Home" element={<Home/>} />
-    
-                
-                </Routes>
-                </Font>
-    </>
-  );
-};
-
-export default Navbar;
+export default Navbar
