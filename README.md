@@ -18,7 +18,7 @@ https://github.com/WebDesign-MultiMedia/FrontEndCap
 https://github.com/WebDesign-MultiMedia/VehicleDB
 
 ## Live
-- https://v-tacker.vercel.app/vehicleTrackerPage
+- https://v-tacker.vercel.app/
 
 ## Tools and Libraries
 List the tools and libraries used in your project:
