@@ -34,7 +34,6 @@
     "react-bootstrap": "^2.10.4",
     "react-charts": "^3.0.0-beta.57",
     "react-dom": "^18.3.1",
-    "react-font": "^1.2.1",
     "react-router-dom": "^6.26.2",
     "react-webcam": "^7.2.0",
     "recharts": "^2.12.7"
