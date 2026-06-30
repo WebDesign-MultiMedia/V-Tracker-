@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react'
 import Webcam from 'react-webcam'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDownload, faTrash, faCircle, faStop, faCamera } from '@fortawesome/free-solid-svg-icons'
+import { faDownload, faTrash, faCircle, faStop, faCamera, faRotate } from '@fortawesome/free-solid-svg-icons'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
@@ -42,6 +42,7 @@ const VidCamCapture = () => {
   const [recording, setRecording] = useState(false)
   const [processing, setProcessing] = useState(false)
   const [view, setView] = useState('images')
+  const [facingMode, setFacingMode] = useState('user')
   const [camReady, setCamReady] = useState(false)
   const [camError, setCamError] = useState(false)
   const [flash, setFlash] = useState(false)
@@ -51,6 +52,12 @@ const VidCamCapture = () => {
     setImages(stored.length ? stored : DUMMY_IMAGES)
     // Blob URLs are session-only and cannot be restored from localStorage
   }, [])
+
+  const flipCamera = () => {
+    setCamReady(false)
+    setCamError(false)
+    setFacingMode(prev => prev === 'user' ? 'environment' : 'user')
+  }
 
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot()
@@ -175,6 +182,7 @@ const VidCamCapture = () => {
                     screenshotFormat="image/jpeg"
                     className="w-full rounded-t-2xl"
                     style={{ maxHeight: '400px', objectFit: 'cover', display: 'block' }}
+                    videoConstraints={{ facingMode }}
                     onUserMedia={() => setCamReady(true)}
                     onUserMediaError={() => setCamError(true)}
                   />
@@ -211,6 +219,16 @@ const VidCamCapture = () => {
                 className="flex items-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium px-4 py-2.5 rounded-xl transition-all text-sm"
               >
                 <FontAwesomeIcon icon={faCamera} /> Capture Photo
+              </button>
+
+              <button
+                onClick={flipCamera}
+                disabled={recording || processing}
+                title={facingMode === 'user' ? 'Switch to rear camera' : 'Switch to front camera'}
+                className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium px-4 py-2.5 rounded-xl transition-all text-sm"
+              >
+                <FontAwesomeIcon icon={faRotate} />
+                {facingMode === 'user' ? 'Rear Camera' : 'Front Camera'}
               </button>
 
               {recording ? (
