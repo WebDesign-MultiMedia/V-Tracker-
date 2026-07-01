@@ -1,5 +1,4 @@
 import React from 'react'
-import vd2 from '../assets/getStarted.mp4'
 import HomeNavbar from './beforeLoginNav'
 import { Link } from 'react-router-dom'
 
@@ -8,7 +7,7 @@ const Bg = () => (
     <HomeNavbar />
     <div className="relative w-full h-screen bg-black overflow-hidden">
       <div className="absolute inset-0">
-        <video src={vd2} autoPlay muted loop className="w-full h-full object-cover opacity-40" />
+        <video src="/getStarted.mp4" autoPlay muted loop playsInline className="w-full h-full object-cover opacity-40" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
       <div className="relative z-10 flex flex-col justify-center items-center h-full text-center px-6">
