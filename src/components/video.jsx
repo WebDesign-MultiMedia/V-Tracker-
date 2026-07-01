@@ -47,10 +47,26 @@ const Bg = () => (
     <div className="bg-gray-950 py-20 px-6">
       <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { icon: '🔧', title: 'Maintenance', desc: 'Track every oil change, brake job, and repair' },
-          { icon: '⛽', title: 'Fuel Logs', desc: 'Monitor fuel costs and consumption over time' },
-          { icon: '💰', title: 'Expenses', desc: 'Keep a full record of all vehicle spending' },
-          { icon: '📷', title: 'Captures', desc: 'Photo & video capture for damage documentation' },
+          {
+            icon: '🔧',
+            title: 'Maintenance',
+            desc: 'Never miss a service again. Log oil changes, brake jobs, tire rotations, and any repair — with cost, mileage, and next due date all in one place.',
+          },
+          {
+            icon: '⛽',
+            title: 'Fuel Logs',
+            desc: 'Record every fill-up with gallons, price per gallon, and station info. See exactly what you\'re spending on fuel each month and spot trends over time.',
+          },
+          {
+            icon: '💰',
+            title: 'Expenses',
+            desc: 'Get a clear picture of your total vehicle costs. Track income and expenses side by side with a live balance so you always know where your money is going.',
+          },
+          {
+            icon: '📷',
+            title: 'Captures',
+            desc: 'Snap photos or record videos of parts, damage, or repairs straight from your camera. Build a visual history of your vehicle you can reference anytime.',
+          },
         ].map((f) => (
           <div key={f.title} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-colors">
             <div className="text-3xl mb-3">{f.icon}</div>
