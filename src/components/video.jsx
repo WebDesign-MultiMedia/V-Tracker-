@@ -45,7 +45,12 @@ const Bg = () => (
 
     {/* Features section */}
     <div className="bg-gray-950 py-20 px-6">
-      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="max-w-5xl mx-auto">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Everything you need to manage your vehicle</h2>
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto">V Tracker gives you a complete toolkit to stay on top of every aspect of your vehicle — from maintenance to money.</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
           {
             icon: '🔧',
@@ -74,6 +79,7 @@ const Bg = () => (
             <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
           </div>
         ))}
+      </div>
       </div>
     </div>
   </>
